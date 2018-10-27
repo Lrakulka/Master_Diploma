@@ -52,5 +52,5 @@ def detect(image, conf_threshold, classes, frame_id, video_path, nms_threshold=0
     result = []
     for i in indexes:
         index = i[0]
-        result.append([class_ids[index], confidences[index], boxes[index]])
+        result.append((class_ids[index], confidences[index], boxes[index]))
     return result

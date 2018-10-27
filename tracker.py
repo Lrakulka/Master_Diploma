@@ -55,7 +55,7 @@ def get_tracked(frame):
         if ok:
             # Tracking success
             #                    ID      class      confidence  current  prev box
-            tracked_obj.append([obj_id, value[0][1], value[0][2], bbox, value[0][3]])
+            tracked_obj.append((obj_id, value[0][1], value[0][2], bbox, value[0][3]))
         else:
             # Tracking failure
             remove_obj.append(obj_id)

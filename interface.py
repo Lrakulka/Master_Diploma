@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import collision
 
 colors = None
 
@@ -52,3 +53,33 @@ def show(image, window_name='object detection'):
 
 def close():
     cv2.destroyAllWindows()
+
+
+def click_and_crop(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        param.append((x, y))
+
+
+def create_areas(frame, area_name):
+    area_coordinates = []
+    # load the image, clone it, and setup the mouse callback function
+    image = frame.copy()
+    window_name = "Select area " + area_name
+    cv2.namedWindow(window_name)
+    cv2.setMouseCallback(window_name, click_and_crop, area_coordinates)
+
+    # keep looping until the 'q' key is pressed
+    while True:
+        # display the image and wait for a keypress
+        cv2.imshow(window_name, image)
+        key = cv2.waitKey(1) & 0xFF
+
+        # if the 'q' key is pressed, break from the loop
+        if key == ord("q"):
+            break
+
+        if len(area_coordinates) > 1:
+            cv2.line(image, area_coordinates[-2], area_coordinates[-1], (255, 0, 0), 5)
+    # close all open windows
+    cv2.destroyAllWindows()
+    return [(area_name, [1], 1, collision.create_polygon(area_coordinates))]

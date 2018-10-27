@@ -33,21 +33,21 @@ def synchronize_objects(detected_objects, tracked_objects, fail_synchronize_thre
         if tracked_object is not None:
             # Update tracked obj with detected
             detected_id = tracked_object[0]
-            synchronized_objects.append([detected_id, detected_obj[0], detected_obj[1], detected_obj[2]])
+            synchronized_objects.append((detected_id, detected_obj[0], detected_obj[1], detected_obj[2]))
 
             tracked_objects.remove(tracked_object)
             fail_synchronize_ids.update({detected_id: 0})
         else:
             # Add new detected obj
             last_id += 1
-            synchronized_objects.append([last_id, detected_obj[0], detected_obj[1], detected_obj[2]])
+            synchronized_objects.append((last_id, detected_obj[0], detected_obj[1], detected_obj[2]))
 
     for tracked_obj in tracked_objects:
         obj_id = tracked_obj[0]
         synchronize_attempts = fail_synchronize_ids.get(obj_id, 0)
         if synchronize_attempts < fail_synchronize_threshold:
             # Add not old tracked obj
-            synchronized_objects.append([obj_id, tracked_obj[1], tracked_obj[2], tracked_obj[3]])
+            synchronized_objects.append((obj_id, tracked_obj[1], tracked_obj[2], tracked_obj[3]))
             fail_synchronize_ids.update({obj_id: synchronize_attempts + 1})
         else:
             #interface.draw(frame, [tracked_obj], ['person', 'car', 'synth'], ' syncth fail')

@@ -25,9 +25,9 @@ def main(video_path):
     fail_synchronize_threshold = series_frame * 3
 
     cap = cv2.VideoCapture(video_path)
+    r, frame = cap.read()
+    areas = interface.create_areas(frame, 'only_cars')
     while True:
-        r, frame = cap.read()
-
         # Exit if Q pressed or end of file
         k = cv2.waitKey(1) & 0xFF
         if k == ord('q') or r is False:
@@ -55,16 +55,17 @@ def main(video_path):
             tracked_objects = synchronized_objects
             detect_time = False
 
-#        collisions_objects, info = collision.detect_collisions(tracked_objects, classes)
+        collisions_objects, info = collision.detect_collisions(tracked_objects, areas, frame_id)
         # TODO: use info on interface
 
         interface.draw_obj(frame, tracked_objects, classes)
-      #  interface.draw_collisions(frame, collisions_objects)
+        interface.draw_collisions(frame, collisions_objects)
         interface.show(frame)
 
+        r, frame = cap.read()
         frame_id += 1
     interface.close()
 
 
 if __name__ == '__main__':
-    main("./video/bike_strike.mp4")
+    main("./video/fly_away.mp4")
