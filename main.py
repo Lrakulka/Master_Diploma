@@ -24,8 +24,10 @@ def main(video_path):
     # Synchronizer configs
     fail_synchronize_threshold = series_frame * 3
 
+    interface.init(classes)
     cap = cv2.VideoCapture(video_path)
     r, frame = cap.read()
+    # Create collision areas
     areas = interface.create_areas(frame, 'only_cars')
     while True:
         # Exit if Q pressed or end of file
@@ -58,7 +60,7 @@ def main(video_path):
         collisions_objects, info = collision.detect_collisions(tracked_objects, areas, frame_id)
         # TODO: use info on interface
 
-        interface.draw_obj(frame, tracked_objects, classes)
+        interface.draw_obj(frame, tracked_objects)
         interface.draw_collisions(frame, collisions_objects)
         interface.show(frame)
 

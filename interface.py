@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import collision
 
-colors = None
+colors = {}
 
 
 def draw_prediction(img, obj_id, name, confidence, color, x, y):
@@ -25,16 +25,13 @@ def get_box(box):
     return x, y, round(x + box[2]), round(y + box[3])
 
 
-def draw_obj(image, objects, classes):
-    global colors
-    if colors is None:
-        colors = np.random.uniform(0, 255, size=(len(classes), 3))
+def draw_obj(image, objects):
     for obj in objects:
         x, y, x1, y1 = get_box(obj[3])
         obj_id = obj[0]
-        obj_class = classes[obj[1]]
+        obj_class = obj[1]
         class_conf = obj[2]
-        obj_color = colors[obj[1]]
+        obj_color = colors.get(obj[1], (0, 0, 0))
 
         draw_prediction(image, obj_id, obj_class, class_conf, obj_color, x, y)
         draw_box(image, obj_color, x, y, x1, y1)
@@ -49,6 +46,12 @@ def draw_collisions(image, objects):
 
 def show(image, window_name='object detection'):
     cv2.imshow(window_name, image)
+
+
+def init(classes):
+    global colors
+    for clazz in classes:
+        colors.update({clazz: np.random.uniform(0, 255, 3)})
 
 
 def close():
@@ -82,4 +85,4 @@ def create_areas(frame, area_name):
             cv2.line(image, area_coordinates[-2], area_coordinates[-1], (255, 0, 0), 5)
     # close all open windows
     cv2.destroyAllWindows()
-    return [(area_name, [1], 1, collision.create_polygon(area_coordinates))]
+    return [(area_name, ['car'], 1, collision.create_polygon(area_coordinates))]

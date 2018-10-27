@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import utils
 
 
 def get_result_layer(net):
@@ -24,7 +23,7 @@ def detect(image, conf_threshold, classes, frame_id, video_path, nms_threshold=0
     net.setInput(blob)
     outs = net.forward(get_result_layer(net))
 
-    class_ids = []
+    class_names = []
     confidences = []
     boxes = []
 
@@ -39,15 +38,15 @@ def detect(image, conf_threshold, classes, frame_id, video_path, nms_threshold=0
             confidence = scores[class_id]
 
             if confidence > conf_threshold:
-                class_index = utils.get_index(classes, detectable_classes[class_id])
-                if class_index is not None:
+                class_name = detectable_classes[class_id]
+                if class_name in classes:
                     center_x = int(detection[0] * frame_width)
                     center_y = int(detection[1] * frame_height)
                     w = int(detection[2] * frame_width)
                     h = int(detection[3] * frame_height)
                     x = center_x - w / 2
                     y = center_y - h / 2
-                    class_ids.append(int(class_index))
+                    class_names.append(class_name)
                     confidences.append(float(confidence))
                     boxes.append((x, y, w, h))
 
@@ -58,5 +57,5 @@ def detect(image, conf_threshold, classes, frame_id, video_path, nms_threshold=0
     for i in indexes:
         index = i[0]
         #                   class           confidence       current box
-        result.append([class_ids[index], confidences[index], boxes[index]])
+        result.append([class_names[index], confidences[index], boxes[index]])
     return result
