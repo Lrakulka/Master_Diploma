@@ -113,7 +113,7 @@ def create_areas(frame):
             areas.append(transport_area)
         if key == ord("s"):
             pedestrian_area = create_area(window_name, image, (0, 255, 0), 'pedestrian_area' + str(pedestrian_area_id),
-                                          ['car', 'motorcycle', 'bus', 'truck'], 20)
+                                          ['car', 'motorcycle', 'bus', 'truck'], 40)
             pedestrian_area_id += 1
             areas.append(pedestrian_area)
 
