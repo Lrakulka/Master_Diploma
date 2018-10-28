@@ -3,7 +3,7 @@ MAP_CLEAN_THRESHOLD = 10
 
 
 def get_trigger_points(box):
-    triggers = [(box[0], box[1])]
+    triggers = [(box[0], box[1] + box[3] * 2 / 3), (box[0] + box[2], box[1] + box[3] * 2 / 3)]
     return triggers
 
 
