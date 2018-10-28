@@ -58,10 +58,10 @@ def main(video_path):
             detect_time = False
 
         collisions_objects, info = collision.detect_collisions(tracked_objects, areas, frame_id)
-        # TODO: use info on interface
 
         interface.draw_obj(frame, tracked_objects)
         interface.draw_collisions(frame, collisions_objects)
+        interface.draw_collisions_info(frame, info)
         interface.show(frame)
 
         r, frame = cap.read()

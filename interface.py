@@ -119,3 +119,10 @@ def create_areas(frame):
 
     cv2.destroyAllWindows()
     return areas
+
+
+def draw_collisions_info(img, info):
+    write_last = 4
+    last_info = -write_last if len(info) > write_last else -len(info)
+    for i in range(last_info, 0):
+        cv2.putText(img, info[i], (10, 10 + 10 * -1 * i), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)

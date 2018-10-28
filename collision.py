@@ -34,7 +34,7 @@ def detect_obj_area_collisions(objects, collision_areas, frame_id):
                     collision_map.update({(area_name, obj_id): (collision_number + 1, frame_id)})
                     if area_time_threshold < collision_number + 1:
                         collisions.add(obj)
-                        info.append('Collision ' + obj_class + ' with area id=' + area_name)
+                        info.append('Collision ' + obj_class + ' Id=' + str(obj_id) + ' with area id=' + area_name)
     return collisions, info
 
 
