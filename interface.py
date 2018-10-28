@@ -59,30 +59,39 @@ def close():
 
 
 def click_and_crop(event, x, y, flags, param):
+    param[1][0] = x
+    param[1][1] = y
+    curr_coordinates = param[0]
+
     if event == cv2.EVENT_LBUTTONDOWN:
-        param.append((x, y))
+        curr_coordinates.append((x, y))
+        param[1][2] = True
+
+    if event == cv2.EVENT_RBUTTONDOWN:
+        param[1][2] = False
 
 
 def create_areas(frame, area_name):
     area_coordinates = []
+    curr_coordinates = [0, 0, True]
     # load the image, clone it, and setup the mouse callback function
     image = frame.copy()
     window_name = "Select area " + area_name
     cv2.namedWindow(window_name)
-    cv2.setMouseCallback(window_name, click_and_crop, area_coordinates)
+    cv2.setMouseCallback(window_name, click_and_crop, (area_coordinates, curr_coordinates))
 
-    # keep looping until the 'q' key is pressed
     while True:
-        # display the image and wait for a keypress
-        cv2.imshow(window_name, image)
-        key = cv2.waitKey(1) & 0xFF
+        if len(area_coordinates) > 1:
+            cv2.line(image, area_coordinates[-2], area_coordinates[-1], (255, 0, 0), 5)
 
-        # if the 'q' key is pressed, break from the loop
+        image_copy = image.copy()
+        if len(area_coordinates) > 0 and curr_coordinates[2]:
+            cv2.line(image_copy, area_coordinates[-1], (curr_coordinates[0], curr_coordinates[1]), (255, 0, 0), 5)
+
+        key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
 
-        if len(area_coordinates) > 1:
-            cv2.line(image, area_coordinates[-2], area_coordinates[-1], (255, 0, 0), 5)
-    # close all open windows
+        cv2.imshow(window_name, image_copy)
     cv2.destroyAllWindows()
-    return [(area_name, ['car'], 1, collision.create_polygon(area_coordinates))]
+    return [(area_name, ['person'], 1, collision.create_polygon(area_coordinates))]
