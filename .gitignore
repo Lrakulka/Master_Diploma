@@ -111,3 +111,6 @@ yolo/*
 # video to process
 video/*
 
+# workspaze
+.idea/workspace.xml
+
