@@ -28,7 +28,7 @@ def main(video_path):
     cap = cv2.VideoCapture(video_path)
     r, frame = cap.read()
     # Create collision areas
-    areas = interface.create_areas(frame, 'only_cars')
+    areas = interface.create_areas(frame)
     while True:
         # Exit if Q pressed or end of file
         k = cv2.waitKey(1) & 0xFF
