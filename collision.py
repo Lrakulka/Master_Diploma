@@ -3,7 +3,7 @@ MAP_CLEAN_THRESHOLD = 10
 
 
 def get_trigger_points(box):
-    triggers = [(box[0], box[1] + box[3] * 2 / 3), (box[0] + box[2], box[1] + box[3] * 2 / 3)]
+    triggers = [(int(box[0]), int(box[1] + box[3] * 2 / 3)), (int(box[0] + box[2]), int(box[1] + box[3] * 2 / 3))]
     return triggers
 
 
@@ -19,6 +19,7 @@ def get_collision_number(key, area_time_threshold):
 def detect_obj_area_collisions(objects, collision_areas, frame_id):
     collisions = set()
     info = []
+    triggers = set()
     for area in collision_areas:
         area_name = area[0]
         area_collision_classes = area[1]
@@ -28,6 +29,7 @@ def detect_obj_area_collisions(objects, collision_areas, frame_id):
             obj_id = obj[0]
             obj_class = obj[1]
             obj_triggers = get_trigger_points(obj[3])
+            triggers.update(obj_triggers)
             for trigger in obj_triggers:
                 if obj_class in area_collision_classes and is_in_polygon(area_polygon, trigger[0], trigger[1]):
                     collision_number = get_collision_number((area_name, obj_id), area_time_threshold)
@@ -35,17 +37,20 @@ def detect_obj_area_collisions(objects, collision_areas, frame_id):
                     if area_time_threshold < collision_number + 1:
                         collisions.add(obj)
                         info.append('Collision ' + obj_class + ' Id=' + str(obj_id) + ' with area id=' + area_name)
-    return collisions, info
+    return collisions, info, triggers
 
 
 def detect_collisions(objects, collision_areas, frame_id):
     collisions = set()
     info = []
-    obj_area_collisions, obj_area_collisions_info = detect_obj_area_collisions(objects, collision_areas, frame_id)
+    triggers = set()
+    obj_area_collisions, obj_area_collisions_info, obj_area_collisions_triggers = \
+        detect_obj_area_collisions(objects, collision_areas, frame_id)
     # TODO: Other collision detectors
     collisions.update(obj_area_collisions)
     info.extend(obj_area_collisions_info)
-    return collisions, info
+    triggers.update(obj_area_collisions_triggers)
+    return collisions, info, triggers
 
 
 # Thank you http://alienryderflex.com/polygon/

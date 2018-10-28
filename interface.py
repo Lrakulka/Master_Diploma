@@ -126,3 +126,8 @@ def draw_collisions_info(img, info):
     last_info = -write_last if len(info) > write_last else -len(info)
     for i in range(last_info, 0):
         cv2.putText(img, info[i], (10, 10 + 10 * -1 * i), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+
+def draw_triggers(img, triggers):
+    for trigger in triggers:
+        cv2.circle(img, trigger, 2, (0, 0, 0), 2)

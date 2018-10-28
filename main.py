@@ -57,11 +57,12 @@ def main(video_path):
             tracked_objects = synchronized_objects
             detect_time = False
 
-        collisions_objects, info = collision.detect_collisions(tracked_objects, areas, frame_id)
+        collisions_objects, info, triggers = collision.detect_collisions(tracked_objects, areas, frame_id)
 
         interface.draw_obj(frame, tracked_objects)
         interface.draw_collisions(frame, collisions_objects)
         interface.draw_collisions_info(frame, info)
+        interface.draw_triggers(frame, triggers)
         interface.show(frame)
 
         r, frame = cap.read()
