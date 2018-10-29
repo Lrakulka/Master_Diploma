@@ -86,7 +86,8 @@ def create_area(window_name, image, color, area_name, restricted_classes, area_t
 
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q") or curr_coordinates[2] is False:
-            cv2.line(image, area_coordinates[0], area_coordinates[-1], color, 5)
+            if len(area_coordinates) > 1:
+                cv2.line(image, area_coordinates[0], area_coordinates[-1], color, 5)
             cv2.imshow(window_name, image)
             break
         cv2.imshow(window_name, image_copy)

@@ -3,7 +3,8 @@ MAP_CLEAN_THRESHOLD = 10
 
 
 def get_trigger_points(box):
-    triggers = [(int(box[0]), int(box[1] + box[3] * 2 / 3)), (int(box[0] + box[2]), int(box[1] + box[3] * 2 / 3))]
+    triggers = [(round(box[0]), round(box[1] + box[3] * 2 / 3)),
+                (round(box[0] + box[2]), round(box[1] + box[3] * 2 / 3))]
     return triggers
 
 
@@ -37,6 +38,7 @@ def detect_obj_area_collisions(objects, collision_areas, frame_id):
                     if area_time_threshold < collision_number + 1:
                         collisions.add(obj)
                         info.append('Collision ' + obj_class + ' Id=' + str(obj_id) + ' with area id=' + area_name)
+                        break
     return collisions, info, triggers
 
 
